@@ -3,8 +3,8 @@
 
 import rospy
 from std_msgs.msg import Bool
-from edo_core_msgs.msg import MachineState
 from edo_core_msgs.msg import JointInit
+from edo_core_msgs.msg import MachineState
 from edo_core_msgs.msg import JointReset
 from edo_core_msgs.msg import JointControlArray
 from edo_core_msgs.msg import JointControl
