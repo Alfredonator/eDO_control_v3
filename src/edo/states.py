@@ -247,7 +247,7 @@ class EdoStates(object):
         msg_ji = JointInit()
         # this code is from ros.service.ts
         msg_ji.mode = 0
-        msg_ji.joints_mask = (1 << self.NUMBER_OF_JOINTS) - 1  # 127
+        msg_ji.joints_mask = (1 << self.NUMBER_OF_JOINTS) - 1  # 127 
         msg_ji.reduction_factor = 0.0
         # rospy.loginfo(msg_ji)
         self._joint_init_command_pub.publish(msg_ji)  # /bridge_init
@@ -315,6 +315,10 @@ class EdoStates(object):
             while not (self.edo_current_state == self.CS_NOT_CALIBRATED and self.edo_opcode == self.OP_JOINT_UNCALIBRATED) and not rospy.is_shutdown():
                 rospy.loginfo("Waiting machine state CS_NOT_CALIBRATED (currently {}) and opcode OP_CS_NOT_CALIBRATED (currently {})...".format(
                     self.get_current_code_string(), self.get_current_opcode_messages()))
+		# If robot is braked we remove the brakes (happens when turning on the robot)
+		if self.get_current_code_string() == 'BRAKED':
+    		    rospy.logwarn("Robot BRAKED - Running disengage brakes")
+		    self.disengage_brakes()
                 self.update()
                 rospy.sleep(1)
 

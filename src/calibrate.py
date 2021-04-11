@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
+import traceback
 from edo.states import EdoStates
 
 
@@ -12,6 +13,7 @@ if __name__ == '__main__':
     try:
         calibrated = states.calibration()
     except:
+    	traceback.print_exc()
         rospy.logerr("Robot calibration did not finish")
     else:
         if calibrated:
