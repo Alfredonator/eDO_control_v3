@@ -111,12 +111,17 @@ class JointTrajectoryActionServer(object):
 
         # Start the action server
         rospy.sleep(0.5)
-        if self.states.edo_current_state in [self.states.CS_CALIBRATED, self.states.CS_BRAKED]:
-            self._server.start()
-            self._alive = True
-        else:
-            rospy.logerr("Joint Trajectory Action Server cannot be started when robot is in state %s" % self.states.get_current_code_string())
-            rospy.logerr("Make sure your robot is started and calibrated properly with calibrate.launch")
+        while True:
+            if self.states.edo_current_state in [self.states.CS_CALIBRATED, self.states.CS_BRAKED]:
+                self._server.start()
+                self._alive = True
+		rospy.loginfo("Trayectory action server started")
+                break
+            else:
+                rospy.logerr("Joint Trajectory Action Server cannot be started when robot is in state %s" % self.states.get_current_code_string())
+                rospy.logerr("Make sure your robot is started and calibrated properly with calibrate.launch")
+                rospy.logerr("Trying again in 1 second... ")
+                rospy.sleep(1)
 
     def spin(self):
         while not rospy.is_shutdown():
