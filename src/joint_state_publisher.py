@@ -22,13 +22,11 @@ def jsa_to_js(jsa):
     # grip position and velocity
     jnt_7 = [joint for joint in jsa.joints][-1:]
     jnt_7 = jnt_7[0]
-    jnt_7_position = jnt_7.position * 0.01745
-    jnt_7_velocity = jnt_7.velocity * 0.01745
-    (base_p, tip_p) = transform_joint_7_to_grip_states(jnt_7_position) 
-    (base_v, tip_v) = transform_joint_7_to_grip_states(jnt_7_velocity)
+    (base_p, tip_p) = transform_joint_7_to_grip_states(jnt_7.position * 0.01745) 
+
     ## add position and velocity to griper base and tip joints.
     position.extend([base_p, base_p, tip_p, tip_p])
-    velocity.extend([base_v, base_v, tip_v, tip_v])
+    velocity.extend([0, 0, 0, 0])
     effort.extend([0, 0, 0, 0])
     return (position, velocity, effort)
     
