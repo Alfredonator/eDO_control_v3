@@ -312,7 +312,7 @@ class EdoStates(object):
             rospy.logwarn("Robot was already calibrated, going for a new calibration...")
             rospy.logerr("Recalibrating a calibrated robot may requires reboot if it doesn't jog, see https://github.com/ymollard/eDO_control/issues/2")
         else:
-            while not (self.edo_current_state == self.CS_NOT_CALIBRATED and self.edo_opcode == self.OP_JOINT_UNCALIBRATED) and not rospy.is_shutdown():
+            while not (self.edo_current_state == self.CS_NOT_CALIBRATED or self.edo_opcode == self.OP_JOINT_UNCALIBRATED) and not rospy.is_shutdown():
                 rospy.loginfo("Waiting machine state CS_NOT_CALIBRATED (currently {}) and opcode OP_CS_NOT_CALIBRATED (currently {})...".format(
                     self.get_current_code_string(), self.get_current_opcode_messages()))
 		# If robot is braked we remove the brakes (happens when turning on the robot)
