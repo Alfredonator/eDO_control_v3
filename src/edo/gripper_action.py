@@ -12,6 +12,7 @@ from control_msgs.msg import (
     GripperCommandResult,
 )
 
+
 class GripperActionServer(object):
     def __init__(self):
         self._name_space = 'grip/gripper_action'
@@ -51,23 +52,25 @@ class GripperActionServer(object):
         self._feedback.position = self.states.gripper_position
         # True when the grip reach 5mm to its destination.
         self._feedback.reached_goal = (fabs(self.states.gripper_position - position) < 5)
-	self._result = self._feedback
-	self._server.publish_feedback(self._feedback)
+        self._result = self._feedback
+        self._server.publish_feedback(self._feedback)
 
     def _on_gripper_action(self, goal):
         position = goal.command.position
         control_rate = rospy.Rate(20.0)
         self._update_feedback(position)
         start_time = rospy.get_time()
+
         def now_from_start(start):
             return rospy.get_time() - start
+
         while ((now_from_start(start_time) < self._timeout or self._timeout < 0.0 and not rospy.is_shutdown())):
             if self._check_state(position):
                 self._server.set_suceeded(self._result)
                 return
             self._command_gripper(position)
             control_rate.sleep()
-	if not rospy.is_shutdown():
+        if not rospy.is_shutdown():
             rospy.logerr("%s: Gripper Command Not Achieved in Allotted Time" %
                          (self._action_name,))
         self._update_feedback(position)
