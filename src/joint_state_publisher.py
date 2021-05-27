@@ -12,7 +12,7 @@ from rospy import ROSException
 
 joints_names = ordered_joint_names[:-1] + grip_joints
 js = JointState(name=joints_names)
-js_publisher = rospy.Publisher('joint_states', JointState, queue_size=45)
+js_publisher = rospy.Publisher('joint_states', JointState, queue_size=5)
 
 def jsa_to_js(jsa):
     # arm positions and velocity
